@@ -1,0 +1,1 @@
+{"name":"Local: 最大烷烃","url":"e:\\project\\C++vscode\\算法模板\\00经典题\\03图论\\树\\最大烷烃.cpp","tests":[{"id":1741318371118,"input":"9\n1 2\n2 3\n3 4\n4 5\n2 6\n2 7\n3 8\n3 9\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\算法模板\\00经典题\\03图论\\树\\最大烷烃.cpp","group":"local","local":true}

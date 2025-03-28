@@ -1,0 +1,2 @@
+
+        string s;cin >> s;

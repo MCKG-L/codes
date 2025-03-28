@@ -1,0 +1,1 @@
+{"name":"Local: 单调队列","url":"e:\\project\\C++vscode\\算法模板\\ch2 数据结构\\03 单调栈和单调队列\\单调队列.cpp","tests":[{"id":1740793149841,"input":"10 3\n3 4 2 5 6 3 1 4 6 7","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\算法模板\\ch2 数据结构\\03 单调栈和单调队列\\单调队列.cpp","group":"local","local":true}

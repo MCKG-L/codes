@@ -1,0 +1,1 @@
+{"name":"Local: 12","url":"e:\\project\\C++vscode\\练习\\杂项\\杂\\12.cpp","tests":[{"id":1739606538987,"input":"5 5\nHHGHG\n1 2\n2 3\n2 4\n1 5\n1 4 H\n1 4 G\n1 3 G\n1 3 H\n5 5 H","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\练习\\杂项\\杂\\12.cpp","group":"local","local":true}
