@@ -9,6 +9,10 @@ const int N = 5e5 + 10;
 一个数列的最大公约数和其差分数列的最大公约数相同
 利用差分数组，转化为单点修改，区间查询的问题，可以用线段树维护区间最大公约数
 用树状数组维护前缀和
+gcd(A1​,A2​,…,An​)​=gcd[gcd(A1​,A2​),gcd(A2​,A3​),…,gcd(An−1​,An​)]
+               =gcd[gcd(A1​,A2​−A1​),…,gcd(An−1​,An​−An−1​)]
+               =gcd(A1​,A2​−A1​,A3​−A2​,…,An​−An−1​)​
+---> gcd[l,r] = gcd(a[l],gcd(dl+1,dl+2,...,dr))
 Q l r -> ans = gcd(a[l],gcd([l+1~r]));
 */
 int n,m;
@@ -50,7 +54,6 @@ void modify(int u,int x,int v){
     }
 }
 Node query(int u,int l,int r){
-
     if(tr[u].l >= l && tr[u].r <= r) return tr[u];
     else{
         int mid = tr[u].l + tr[u].r >> 1;
@@ -70,6 +73,7 @@ signed main()
     cin.tie(0);cout.tie(0);
     cin >> n >> m;
     for(int i=1;i<=n;i++) cin >> a[i];
+
     build(1,1,n);
     while(m--){
         string op;int l,r;

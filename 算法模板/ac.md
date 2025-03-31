@@ -76,7 +76,7 @@ struct SegmentTree {
 	}
     void modify(int u, int st, int ed, int pos, const Info &v) {
         if (st == ed) {
-            tree[u] = u;
+            tree[u] = v;
             return;
         }
         int mid = (st + ed) / 2;
@@ -121,7 +121,6 @@ struct SegmentTree {
 		if(st>r||ed<l){
 			return -1;
 		}
-		
 		if(st>=l&&ed<=r&&!pred(tree[u])){//从右向左找第一个满足条件的位置；找不到返回-1
 			return -1;
 		}
@@ -234,21 +233,20 @@ struct LazySegTree {
 };
 //----------重写-----------------
 struct Tag { //懒标记信息
-    int add;
+    
     void apply(const Tag &t){ //懒标记传递
-        add += t.add;
+        
     }
 };
 struct Info { //线段树维护的信息
-    int sum,l,r;
+    
     void apply(const Tag &t) {// 懒标记apply
-        sum += t.add * (r - l + 1);
+        
     }
 };
 Info operator+(const Info &ls,const Info &rs) { //由子节点更新父节点
     Info u;
-    u.l = ls.l,u.r = rs.r;
-    u.mx = ls.sum + rs.sum;
+    
     return u;
 }
 // -------------------------------
@@ -258,7 +256,31 @@ void init(){
         seg.modify(i,{x,i,i}) //初始化节点区间信息
     }
 }
-//区间修改 区间和
+
+// ---------区间赋值 区间最值-----------
+struct Tag { //懒标记信息
+    int add；
+    bool put = false;
+    void apply(const Tag &t){ //懒标记传递
+        if(t.put){
+            put = t.put;
+            add = t.add;
+        }
+    }
+};
+struct Info { //线段树维护的信息
+    int mx;
+    void apply(const Tag &t) {// 懒标记apply
+        if(t.put) mx += t.add;
+    }
+};
+Info operator+(const Info &ls,const Info &rs) { //由子节点更新父节点
+    Info u;
+    u.mx = max(ls.mx,rs,mx);
+    return u;
+}
+
+// -----------区间修改 区间和---------
 struct Tag { //懒标记信息
     int add;
     void apply(const Tag &t){ //懒标记传递
@@ -274,12 +296,12 @@ struct Info { //线段树维护的信息
 Info operator+(const Info &ls,const Info &rs) { //由子节点更新父节点
     Info u;
     u.l = ls.l,u.r = rs.r;
-    u.mx = ls.sum + rs.sum;
+    u.sum = ls.sum + rs.sum;
     return u;
 }
 
 
-//区间修改 区间最值
+// ---------区间修改 区间最值-----------
 struct Tag { //懒标记信息
     int add;
     void apply(const Tag &t){ //懒标记传递
@@ -298,6 +320,41 @@ Info operator+(const Info &ls, const Info &rs) { //由子节点更新父节点
     return u;
 }
 
+```
+
+# ST表 RMQ
+``` cpp
+// 求区间最大值、最小值、区间&、区间|、区间gcd、区间lcm
+// 基于倍增 预处理nlog(n) 查询O(1)
+template<class T>
+struct RMQ { //传入数组[0~n-1] 查询下表[1~n]
+	int n;
+	vector<T>a;
+	vector<array<T, 21>> f;
+	function<T(T, T)> func;
+	RMQ() {};
+	vector<int> len;
+	void work(vector<T> a,function<T(T, T)> func_) { //传入lmbda表达式
+		this->a = a;
+		this->func = func_;
+		n = a.size();
+		f.assign(n+1, {});
+		len.resize(n + 1);
+		len[1] = 0;
+		for (int i = 2; i <= n; i++) len[i] = len[i / 2] + 1;//求log2(i)
+		for (int i = 1; i <= n; i++) f[i][0] = a[i-1];
+		const int lg = log2(n);
+		for (int j = 1; j <= lg; j++) {
+			for (int i = 1; i + (1 << (j)) - 1 <= n; i++) {
+				f[i][j] = func(f[i][j - 1], f[i + (1 << (j - 1))][j - 1]);
+			}
+		}
+		return;
+	}
+	T ask(int l, int r) {
+		return func(f[l][len[r - l + 1]], f[r - (1 << len[r - l + 1]) + 1][len[r - l + 1]]);
+	}
+};
 ```
 # 并查集
 ``` cpp

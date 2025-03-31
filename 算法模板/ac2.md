@@ -102,7 +102,7 @@ $ \sum_{i=0}^{n} \ C{n}^{i} \cdot i = n \cdot 2^{n-1} $
 $ (x + y)^n = \sum_{i=0}^{n} \ C{n}^{i} x^i y^{n-i} $
 # ST表		
 
-```
+``` cpp
 求区间最大值，求区间最小值，求区间&，求区间|，求区间gcd。				
 示例区间最大值。		
 template<class T>
@@ -120,8 +120,8 @@ struct rmq {
 		f.assign(n+1, {});
 		len.resize(n + 1);
 		len[1] = 0;
-		for (int i = 2; i <= n; i++)len[i] = len[i / 2] + 1;
-		for (int i = 1; i <= n; i++)f[i][0] = a[i-1];
+		for (int i = 2; i <= n; i++) len[i] = len[i / 2] + 1;//求log2(i)
+		for (int i = 1; i <= n; i++) f[i][0] = a[i-1];
 		const int lg = log2(n);
 		for (int j = 1; j <= lg; j++) {
 			for (int i = 1; i + (1 << (j)) - 1 <= n; i++) {
@@ -139,7 +139,7 @@ struct rmq {
 
 
 # 二维前缀和
-```	
+```	cpp
 for(int i=1;i<=n;i++)				
     for(int j=1;j<=m;j++)				
         sum[i][j]=arr[i][j]+sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1];	
@@ -155,7 +155,7 @@ arr[x2+1][y2+1] += c;
 ```				
 				
 # 树上公共祖先（lca)			
-```	
+```	cpp
 struct  HLD {
     int n;
     vector<int>sz, top, de, fa, id, seq,son,dfn;

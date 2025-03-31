@@ -34,7 +34,7 @@ void solve(){
         if(cnt[d] < k) continue;
         for(int i=d;i<=M;i+=d){
             ans[i] = max(ans[i],d);
-        } 
+        }
     }
     for(int i=0;i<n;i++) cout << ans[a[i]] << '\n';
 }

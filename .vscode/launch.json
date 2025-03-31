@@ -63,8 +63,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "e:/project/C++vscode/算法模板/ch1 基本算法/二分",
-      "program": "e:/project/C++vscode/算法模板/ch1 基本算法/二分/build/Debug/outDebug",
+      "cwd": "e:/project/C++vscode",
+      "program": "e:/project/C++vscode/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

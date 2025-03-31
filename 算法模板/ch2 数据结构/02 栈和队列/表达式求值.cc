@@ -57,7 +57,7 @@ int main()
         else if (c == ')')
         {
             //不断使用eval函数对末尾数字运算
-            while (op.top() != '(')eval();
+            while (op.top() != '(') eval();
             //弹出左括号
             op.pop();
         }
