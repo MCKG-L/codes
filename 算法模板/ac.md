@@ -510,3 +510,38 @@ struct DCC{
     }
 };
 ```
+# 矩阵快速幂
+``` cpp
+int matlen; //矩阵的长度
+struct matrix { // [1,n]
+    using i64 = long long;
+    i64 a[60][60];
+    matrix(){
+        memset(a,0,sizeof(a));
+    }
+	matrix operator*(matrix x) {
+        matrix ans=matrix(); 
+        for(int i=1;i<=matlen;i++){
+            for(int j=1;j<=matlen;j++){
+                for(int k=1;k<=matlen;k++){
+                    ans.a[i][j]+=a[i][k]*x.a[k][j]%mod;
+                    ans.a[i][j]%=mod;
+                }
+            }
+        }
+        return ans;
+ 	}
+    matrix operator^(int b){
+        matrix ans=matrix();
+        for(int i=1;i<=matlen;i++){
+            ans.a[i][i]=1;
+        }
+        matrix base=*this;
+        while(b){
+            if(b&1)ans=ans*base;
+            b>>=1; base=base*base;
+        }
+        return ans;
+    }
+};
+```

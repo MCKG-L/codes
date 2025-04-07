@@ -1,4 +1,5 @@
 #include <iostream>
+#define int long long
 using namespace std;
 /*
 合并石子 有N堆石子，编号分别为1~N，每一次只能合并相邻的两堆，合并的代价是两堆石子的重量之和。
@@ -9,16 +10,17 @@ f[i][j]表示将编号为i~j的石子合并所需的最小代价  f[1][n];
 状态转移：f[i][j] = Max{f[i][k]+f[k+1][j]+s[j]-s[i-1]} k = i,i+1,...,j-1
 */
 //区间dp
-const int N = 310,INF = 1e9;
+const int N = 410,INF = 1e9;
 int dp[N][N],s[N];
 int n;
-int main()
+signed main()
 {
     cin >> n;
     for(int i=1;i<=n;i++){
         cin >> s[i];
         s[i] += s[i-1];
     }
+    
     for(int len = 2;len <= n;len ++){//区间长度
         for(int i=1;i+len-1<=n;i++){//起点
             int l = i,r = i + len - 1;

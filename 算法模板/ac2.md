@@ -886,7 +886,7 @@ $\begin{bmatrix} f(n)\\ f(n-1)\\ n^3 \\n^2\\n\\1 \end{bmatrix}$ =$\begin{bmatrix
 
 
 
-```
+``` cpp
 int matlen;
 struct mat {
     using i64 = long long;
@@ -922,7 +922,7 @@ struct mat {
 ```
 
 # scc
-```
+``` cpp
 struct scc{
    vector<int>dfn,vis,low,st;
    vector<int>cnt;
