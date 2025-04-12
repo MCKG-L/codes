@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        .module {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .module-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #3498db;
+            background-color: #f9f9f9;
+        }
+        .upload-icon {
+            font-size: 40px;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .file-list {
+            margin-top: 20px;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-item {
+            display: flex;
+            align-items: center;
+        }
+        .filter-item label {
+            margin-right: 8px;
+        }
+        .filter-item select, .filter-item input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .rating {
+            display: flex;
+            gap: 5px;
+        }
+        .star {
+            color: #ddd;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .star.active {
+            color: #f1c40f;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            border-bottom-color: #3498db;
+            color: #3498db;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .comment-box {
+            margin-top: 15px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>简历管理系统</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- 简历批量上传模块 -->
+        <section class="module" id="upload-module">
+            <h2 class="module-title">简历批量上传</h2>
+            <div class="upload-area" id="dropArea">
+                <div class="upload-icon">📁</div>
+                <p>拖拽文件到此处或点击上传</p>
+                <p>支持格式：PDF, DOC, DOCX</p>
+                <input type="file" id="fileInput" multiple style="display: none;">
+                <button class="btn" onclick="document.getElementById('fileInput').click()">选择文件</button>
+            </div>
+            <div class="file-list" id="fileList">
+                <!-- 上传的文件将显示在这里 -->
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="uploadBtn">开始上传</button>
+            </div>
+        </section>
+
+        <!-- 简历信息提取模块 -->
+        <section class="module" id="extract-module">
+            <h2 class="module-title">简历信息提取</h2>
+            <div class="tabs">
+                <div class="tab active" data-tab="pending">待处理</div>
+                <div class="tab" data-tab="processed">已处理</div>
+                <div class="tab" data-tab="failed">处理失败</div>
+            </div>
+            <div class="tab-content active" id="pending-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>文件名</th>
+                            <th>上传时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-list">
+                        <!-- 待处理简历列表 -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-content" id="processed-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>文件名</th>
+                            <th>处理时间</th>
+                            <th>提取结果</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="processed-list">
+                        <!-- 已处理简历列表 -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-content" id="failed-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>文件名</th>
+                            <th>处理时间</th>
+                            <th>失败原因</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="failed-list">
+                        <!-- 处理失败简历列表 -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 简历信息筛选和展示模块 -->
+        <section class="module" id="filter-module">
+            <h2 class="module-title">简历信息筛选和展示</h2>
+            <div class="filter-section">
+                <div class="filter-item">
+                    <label for="education">学历：</label>
+                    <select id="education">
+                        <option value="">全部</option>
+                        <option value="bachelor">本科</option>
+                        <option value="master">硕士</option>
+                        <option value="phd">博士</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="experience">工作经验：</label>
+                    <select id="experience">
+                        <option value="">全部</option>
+                        <option value="0-3">0-3年</option>
+                        <option value="3-5">3-5年</option>
+                        <option value="5-10">5-10年</option>
+                        <option value="10+">10年以上</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="skills">技能：</label>
+                    <input type="text" id="skills" placeholder="如：Java, Python">
+                </div>
+                <div class="filter-item">
+                    <label for="keyword">关键词：</label>
+                    <input type="text" id="keyword" placeholder="搜索姓名、公司等">
+                </div>
+                <button class="btn" id="searchBtn">搜索</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>年龄</th>
+                        <th>学历</th>
+                        <th>工作经验</th>
+                        <th>技能</th>
+                        <th>评分</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="resume-list">
+                    <!-- 简历列表将在这里显示 -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 候选人评估模块 -->
+        <section class="module" id="evaluation-module">
+            <h2 class="module-title">候选人评估</h2>
+            <div id="candidate-detail">
+                <!-- 候选人详细信息将在这里显示 -->
+                <h3>请从简历列表中选择候选人进行评估</h3>
+            </div>
+            <div id="evaluation-form" style="display: none;">
+                <h3>评估表</h3>
+                <div style="margin: 20px 0;">
+                    <div style="margin-bottom: 15px;">
+                        <label>专业技能评分：</label>
+                        <div class="rating" id="skill-rating">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label>工作经验评分：</label>
+                        <div class="rating" id="experience-rating">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label>教育背景评分：</label>
+                        <div class="rating" id="education-rating">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label>综合评分：</label>
+                        <div class="rating" id="overall-rating">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-box">
+                    <label for="evaluation-comment">评估意见：</label>
+                    <textarea id="evaluation-comment" placeholder="请输入您对该候选人的评估意见..."></textarea>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" id="saveEvaluationBtn">保存评估</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 文件上传相关功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            // 拖拽上传
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#3498db';
+                dropArea.style.backgroundColor = '#f0f8ff';
+            });
+            
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.borderColor = '#ddd';
+                dropArea.style.backgroundColor = '';
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#ddd';
+                dropArea.style.backgroundColor = '';
+                
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
+            
+            fileInput.addEventListener('change', () => {
+                handleFiles(fileInput.files);
+            });
+            
+            function handleFiles(files) {
+                for (const file of files) {
+                    // 检查文件类型
+                    const fileType = file.name.split('.').pop().toLowerCase();
+                    if (!['pdf', 'doc', 'docx'].includes(fileType)) {
+                        alert(`不支持的文件类型: ${file.name}`);
+                        continue;
+                    }
+                    
+                    // 创建文件项
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <div>${file.name} (${formatFileSize(file.size)})</div>
+                        <button class="btn" style="padding: 5px 10px; background-color: #e74c3c;" onclick="this.parentNode.remove()">删除</button>
+                    `;
+                    fileList.appendChild(fileItem);
+                }
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB';
+                else return (bytes / 1048576).toFixed(2) + ' MB';
+            }
+            
+            // 上传按钮点击事件
+            uploadBtn.addEventListener('click', () => {
+                const fileItems = fileList.querySelectorAll('.file-item');
+                if (fileItems.length === 0) {
+                    alert('请先选择要上传的文件');
+                    return;
+                }
+                
+                // 这里应该是实际的上传逻辑，这里只是模拟
+                alert('文件上传中，请稍候...');
+                setTimeout(() => {
+                    alert('文件上传成功！');
+                    // 清空文件列表
+                    fileList.innerHTML = '';
+                    // 更新待处理列表
+                    updatePendingList();
+                }, 2000);
+            });
+            
+            // 标签切换功能
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // 移除所有标签的active类
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // 给当前点击的标签添加active类
+                    tab.classList.add('active');
+                    
+                    // 隐藏所有内容
+                    const contents = document.querySelectorAll('.tab-content');
+                    contents.forEach(content => content.classList.remove('active'));
+                    
+                    // 显示对应内容
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                });
+            });
+            
+            // 评分功能
+            const ratingContainers = document.querySelectorAll('.rating');
+            ratingContainers.forEach(container => {
+                const stars = container.querySelectorAll('.star');
+                stars.forEach(star => {
+                    star.addEventListener('click', () => {
+                        const value = star.getAttribute('data-value');
+                        stars.forEach(s => {
+                            if (s.getAttribute('data-value') <= value) {
+                                s.classList.add('active');
+                            } else {
+                                s.classList.remove('active');
+                            }
+                        });
+                    });
+                });
+            });
+            
+            // 模拟数据和功能
+            function updatePendingList() {
+                const pendingList = document.getElementById('pending-list');
+                const mockData = [
+                    { name: '张三简历.pdf', time: '2023-05-15 10:30', status: '等待处理' },
+                    { name: '李四简历.docx', time: '2023-05-15 11:45', status: '等待处理' },
+                    { name: '王五简历.pdf', time: '2023-05-15 14:20', status: '等待处理' }
+                ];
+                
+                pendingList.innerHTML = mockData.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.time}</td>
+                        <td>${item.status}</td>
+                        <td><button class="btn" style="padding: 5px 10px;">处理</button></td>
+                    </tr>
+                `).join('');
+            }
+            
+            // 初始化模拟数据
+            updatePendingList();
+            
+            // 模拟简历列表数据
+            const resumeList = document.getElementById('resume-list');
+            const mockResumeData = [
+                { id: 1, name: '张三', age: 28, education: '硕士', experience: '3-5年', skills: 'Java, Spring, MySQL', rating: 4 },
+                { id: 2, name: '李四', age: 32, education: '本科', experience: '5-10年', skills: 'Python, Django, MongoDB', rating: 3 },
+                { id: 3, name: '王五', age: 26, education: '本科', experience: '0-3年', skills: 'JavaScript, React, Node.js', rating: 5 }
+            ];
+            
+            resumeList.innerHTML = mockResumeData.map(item => `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.age}</td>
+                    <td>${item.education}</td>
+                    <td>${item.experience}</td>
+                    <td>${item.skills}</td>
+                    <td>${'★'.repeat(item.rating)}${'☆'.repeat(5-item.rating)}</td>
+                    <td><button class="btn view-btn" data-id="${item.id}" style="padding: 5px 10px;">查看评估</button></td>
+                </tr>
+            `).join('');
+            
+            // 查看评估按钮点击事件
+            const viewBtns = document.querySelectorAll('.view-btn');
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const candidateId = btn.getAttribute('data-id');
+                    const candidate = mockResumeData.find(item => item.id == candidateId);
+                    
+                    // 显示候选人详情
+                    const candidateDetail = document.getElementById('candidate-detail');
+                    candidateDetail.innerHTML = `
+                        <h3>${candidate.name} - 候选人详情</h3>
+                        <div style="margin: 20px 0;">
+                            <p><strong>年龄：</strong> ${candidate.age}</p>
+                            <p><strong>学历：</strong> ${candidate.education}</p>
+                            <p><strong>工作经验：</strong> ${candidate.experience}</p>
+                            <p><strong>技能：</strong> ${candidate.skills}</p>
+                            <p><strong>当前评分：</strong> ${'★'.repeat(candidate.rating)}${'☆'.repeat(5-candidate.rating)}</p>
+                        </div>
+                    `;
+                    
+                    // 显示评估表单
+                    document.getElementById('evaluation-form').style.display = 'block';
+                });
+                
+            });
+            
+            // 保存评估按钮点击事件
+            document.getElementById('saveEvaluationBtn').addEventListener('click', () => {
+                alert('评估已保存！');
+            });
+            
+            // 搜索按钮点击事件
+            document.getElementById('searchBtn').addEventListener('click', () => {
+                alert('搜索功能已触发，实际应用中会根据筛选条件过滤简历列表');
+            });
+        });
+    </script>
+</body>
+</html>

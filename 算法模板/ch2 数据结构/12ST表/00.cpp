@@ -48,7 +48,7 @@ void solve(){
         int l,r;
         cin >> l >> r;
         cout << rmq.ask(l,r) << endl;
-    }
+    }	
 }
 signed main()
 {

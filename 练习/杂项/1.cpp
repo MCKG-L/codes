@@ -6,46 +6,40 @@ typedef pair<int,int> PII;
 using ll = long long;
 using i128 = __int128;
 const int mod = 1e9 + 7,inf = 1e18;
-const int N = 1e6 + 10;
-int prime[N],cnt,p[N];
-bool st[N];
-vector<int> ans;
+const int N = 2e5 + 10;
 void solve(){
-	int a;cin >> a;
-	int x = sqrt(a);
-	if((x + 1)*(x + 1) <= a) x ++;
-	int l = 0,r = ans.size() - 1;
-	while(l <= r){
-		int mid = l + (r - l) / 2;
-		if(ans[mid] <= x) l = mid + 1;
-		else r = mid - 1;
+	int n,m;cin >> n >> m;
+	vector<string> a(n);
+	vector<vector<string>> b(m,vector<string>(n));
+	for(int i=0;i<n;i++) cin >> a[i];
+	for(int i=0;i<m;i++){
+		for(int j=0;j<n;j++) cin >> b[i][j];
 	}
-	cout << ans[r] * ans[r] << endl;
+	int Max = -1;
+	vector<bool> st(n);
+	for(int i=0;i<m;i++){
+		int cnt = 0;
+		for(int j=0;j<n;j++){
+			if(b[i][j] == a[j]){
+				cnt ++;
+				st[j] = 1;
+			}
+		}
+		Max = max(Max,cnt);
+	}
+	for(int i=0;i<n;i++){
+		if(!st[i]){
+			cout << -1 << endl;
+			return;
+		}
+	}
+	cout << n + 2 * (n - Max) << endl;
 }
 signed main()
 {
 	ios::sync_with_stdio(false);
 	cin.tie(0);cout.tie(0);
 	int T = 1;
-	for(int i=2;i<=1e6;i++){
-		if(!st[i]) prime[cnt++] = i,p[i] = i;
-		for(int j=0;prime[j]<=1e6/i;j++){
-			st[i*prime[j]] = 1;
-			p[i*prime[j]] = prime[j];
-			if(i % prime[j] == 0) break;
-		}
-	}
-	for(int i=1;i<=1e6;i++){
-		int nums = 0,x = i;
-		while(p[x]){
-			nums ++;
-			int t = p[x];
-			while(x % t == 0){
-				x /= t;
-			}
-		}
-		if(nums == 2) ans.push_back(i);
-	}
 	#ifdef LOCAL
 		freopen("D:\\Others\\desktop\\text.in","r",stdin);
 	#endif
