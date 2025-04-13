@@ -1,70 +1,52 @@
-#include <iostream>
-#include <algorithm>
-#include <cstring>
-#include <queue>
-#include <stack>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
+#define endl '\n'
+#define int long long
 typedef pair<int,int> PII;
-const int N = 100010;
-int n,m;
-int e[N],h[N],ne[N],w[N],idx;
-int dis[N],prv[N];
-bool st[N];
-void add(int a,int b,int c){
-    e[idx] = b;
-    w[idx] = c;
-    ne[idx] = h[a];
-    h[a] = idx++;
-}
-int dijkstra(){
-    memset(dis,0x3f,sizeof(dis));
-    dis[1] = 0;
-    priority_queue<PII,vector<PII>,greater<PII>> heap;
-    heap.push({0,1});
-    while(heap.size()){
-        PII t = heap.top();heap.pop();
-        int ver = t.second,distance = t.first;
-        if(st[ver]) continue;
-        st[ver] = true;
-        for(int i=h[ver];i!=-1;i=ne[i]){
-            int j = e[i];
-            if(dis[j] > distance + w[i]){
-                dis[j] = distance + w[i];
-                prv[j] = ver;
-                heap.push({dis[j],j});
+using ll = long long;
+using i128 = __int128;
+const int mod = 1e9 + 7,inf = 1e18;
+const int N = 2e5 + 10;
+void solve(){
+    int n,m,s;
+    cin >> n >> m >> s;
+    vector<vector<PII>> a(n + 1);
+    for(int i=0;i<m;i++){
+        int u,v,c;
+        cin >> u >> v >> c;
+        a[u].push_back({v,c});
+    }
+    vector<int> dis(n + 1,inf);
+    vector<bool> st(n + 1,false);
+    auto Dijkstra = [&](int s)->void{
+        priority_queue<PII,vector<PII>,greater<PII>> heap;
+        dis[s] = 0;
+        heap.push({0,s});
+        while(heap.size()){
+            auto [d,ver] = heap.top();heap.pop();
+            if(st[ver]) continue;
+            st[ver] = true;
+            for(auto [v,c] : a[ver]){
+                if(dis[v] > d + c){
+                    dis[v] = d + c;
+                    heap.push({d+c,v});
+                }
             }
         }
-    }
-    if(dis[n] == 0x3f3f3f3f) return -1;
-    return dis[n];
-}
-void print(){
-    stack<int> path;
-    int start = 1,end = n;
-    path.push(end);
-    int k = end;
-    while(k != start){
-        k = prv[k];
-        path.push(k);
-    }
-    while(!path.empty()){
-        cout << path.top() << ' ';
-        path.pop();
-    }
+    };
+    Dijkstra(s);
+    for(int i=1;i<=n;i++) cout << dis[i] << ' ';
     cout << endl;
 }
-int main()
+signed main()
 {
-    cin >> n >> m;
-    memset(h,-1,sizeof(h));
-    while(m--){
-        int a,b,c;
-        cin >> a >> b >> c;
-        add(a,b,c);
-    }
-    int t = dijkstra();
-    print();
-    cout << t << endl;
-    return 0;
+	ios::sync_with_stdio(false);
+	cin.tie(0);cout.tie(0);
+	int T = 1;
+	#ifdef LOCAL
+		freopen("D:\\Others\\desktop\\text.in","r",stdin);
+	#endif
+	// cin >> T;
+	while(T --) solve();
+	return 0;
 }

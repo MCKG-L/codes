@@ -16,7 +16,7 @@ void solve(){
         cin >> u >> v >> c;
         a[u].push_back({v,c});
     }
-    vector<int> dis(n + 1,inf);
+    vector<int> dis(n + 1,inf),pre(n + 1);
     vector<bool> st(n + 1,false);
     auto Dijkstra = [&](int s)->void{
         priority_queue<PII,vector<PII>,greater<PII>> heap;
@@ -29,14 +29,20 @@ void solve(){
             for(auto [v,c] : a[ver]){
                 if(dis[v] > d + c){
                     dis[v] = d + c;
+                    pre[v] = ver;
                     heap.push({d+c,v});
                 }
             }
         }
     };
     Dijkstra(s);
-    for(int i=1;i<=n;i++) cout << dis[i] << ' ';
-    cout << endl;
+    auto print = [&](auto &print,int u)->void{
+        if(!u) return;
+        print(print,pre[u]);
+        cout << u << ' ';
+    };
+    cout << dis[n] << endl;
+    print(print,n);
 }
 signed main()
 {

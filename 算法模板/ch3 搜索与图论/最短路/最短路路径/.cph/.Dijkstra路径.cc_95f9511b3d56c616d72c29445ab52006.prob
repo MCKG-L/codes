@@ -1,0 +1,1 @@
+{"name":"Local: Dijkstra路径","url":"e:\\project\\C++vscode\\算法模板\\ch3 搜索与图论\\最短路\\最短路路径\\Dijkstra路径.cc","tests":[{"id":1744513168488,"input":"4 6 1\n1 2 2\n2 3 2\n2 4 1\n1 3 5\n3 4 3\n1 4 4","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\算法模板\\ch3 搜索与图论\\最短路\\最短路路径\\Dijkstra路径.cc","group":"local","local":true}

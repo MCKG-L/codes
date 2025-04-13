@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 /*
-每个物品的个数有限，在背包容量有限厄的情况下，装出价值和最多的物品
+每个物品的个数有限，在背包容量有限制的情况下，装出价值和最多的物品
 */
 const int N = 25000, M = 2010;
 int v[N],w[N];

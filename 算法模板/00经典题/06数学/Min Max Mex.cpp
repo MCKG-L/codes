@@ -7,6 +7,13 @@ using ll = long long;
 using i128 = __int128;
 const int mod = 1e9 + 7,inf = 1e18;
 const int N = 2e5 + 10;
+/* codeforces DIV3_1016_E
+给你一个长度为 n 的数组 a 和一个数字 k子数组的定义是数组中
+一个或多个连续元素的序列。你需要将数组a分割成k个不重叠的子数组 b1,b2,…,bk,
+使得这k个子数组的Mex值的最小值最大，求最大值
+
+二分 check思路
+*/
 void solve(){
 	int n,k;
 	cin >> n >> k;

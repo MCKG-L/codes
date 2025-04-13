@@ -11,6 +11,7 @@ int gcd(int a,int b){
         b = r;
     }
     return a;
+    // return b ? gcd(b,a%b) : a;
 }
 int main()
 {
