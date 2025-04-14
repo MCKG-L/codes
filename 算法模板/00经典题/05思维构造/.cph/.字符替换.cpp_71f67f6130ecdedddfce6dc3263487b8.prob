@@ -1,0 +1,1 @@
+{"name":"Local: 字符替换","url":"e:\\project\\C++vscode\\算法模板\\00经典题\\05思维构造\\字符替换.cpp","tests":[{"id":1744558322537,"input":"11 4\n.o???????o.","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\算法模板\\00经典题\\05思维构造\\字符替换.cpp","group":"local","local":true}
