@@ -1,0 +1,1 @@
+{"name":"Local: 快速幂+bitset","url":"e:\\project\\C++vscode\\算法模板\\ch5 动态规划\\背包问题\\01背包\\快速幂+bitset.cpp","tests":[{"id":1747404900563,"input":"8 20\n5 0 0 0 0 0 0 0","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\算法模板\\ch5 动态规划\\背包问题\\01背包\\快速幂+bitset.cpp","group":"local","local":true}

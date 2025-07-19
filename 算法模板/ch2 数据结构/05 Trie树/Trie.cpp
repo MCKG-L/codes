@@ -11,7 +11,7 @@ void insert(char str[]){
         if(!son[p][u]) son[p][u] = ++idx;
         p = son[p][u];
     }
-    cnt[p]++;                          
+    cnt[p]++;                     
 }
 int query(char str[]){
     int p = 0;

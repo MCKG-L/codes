@@ -1,0 +1,1 @@
+{"name":"Local: bad","url":"e:\\project\\C++vscode\\练习\\杂项\\00 对拍\\bad.cpp","tests":[{"id":1745381762458,"input":"4 2\n2 1 5\n3 4 -3","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\练习\\杂项\\00 对拍\\bad.cpp","group":"local","local":true}

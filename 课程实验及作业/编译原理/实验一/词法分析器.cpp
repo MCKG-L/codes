@@ -306,7 +306,8 @@ string GETSYM()
         }
         SYM_type = NUM_SYM;
         numValue = count;
-        cin.putback(ch);   //数字的输出
+        cin.putback(ch);   
+        //数字的输出
         insertConst(numValue);
         print_result<int>(SYM_type, numValue, insertConst(numValue));
 //#if DEBUG
@@ -314,7 +315,8 @@ string GETSYM()
         debugNumber = numValue;
 //#endif
         return "number";
-    }//补充算符和界符部分
+    }
+    //补充算符和界符部分
     else if(ch == '='){
         SYM_type = EQUAL_SYM;
         print_result(SYM_type);

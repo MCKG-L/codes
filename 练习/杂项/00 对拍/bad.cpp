@@ -1,32 +1,63 @@
 #include <bits/stdc++.h>
-#define endl '\n'
 #define int long long
+#define endl '\n'
 using namespace std;
+using i128 = __int128;
 typedef pair<int,int> PII;
-const int inf = 1e18;
-void solve(){
-	int n,m;
-	cin >> n >> m;
-	vector<int> a(n + 1);
-	for(int i=1;i<=n;i++) cin >> a[i];
-	sort(a.begin()+1,a.begin()+1+n);
-	int ans = inf;
-	// for(int i=1;i<n;i++) ans = min(ans,a[i+1]*a[i+1]-a[i]*a[i]);
-	for(int i=1;i+m-1<=n;i++){
-		int j = i + m - 1;
-		ans = min(ans,a[j]*a[j]-a[i]*a[i]);
+using ll = long long;
+const int N = 5e5 + 10,mod = 1e9 + 7,inf = 1e18;
+int qmi(int a,int b){
+	int res = 1;
+	while(b){
+		if(b & 0x1) res = res * a;
+		b >>= 1;
+		a = a * a;
 	}
-	cout << ans << endl;
+	return res;
+}
+void solve(){
+    int l,r;
+    cin >> l >> r;
+    auto Pow = [&](int x,int t)->int{
+        int ans = 0;
+        for(int i=1;i<=x;i++){
+            // ans += pow(i,t-1);//被精度害死的！！！
+			ans += qmi(i,t-1);
+        }
+        return ans;
+    };
+    auto dfs = [&](auto dfs,string x,int n,int M,int u,bool ok)->int{
+        if(u >= n){
+            return 1;
+        }
+        if(ok){ //[0,M]
+            return (M+1) * dfs(dfs,x,n,M,u+1,1);
+        }else{
+            int ans = 0,m = x[u]-'0';
+            int Max = min(M,m);
+            if(Max == m){
+                ans += dfs(dfs,x,n,M,u+1,0) + (Max > 0 ? Max * dfs(dfs,x,n,M,u+1,1) : 0);
+            }else{
+                ans += (Max + 1) * dfs(dfs,x,n,M,u+1,1);
+            }
+            return ans;
+        }
+    };
+    auto cal = [&](string x)->int{
+        int ans = 0,n = x.size();
+        for(int i=1;i<=n-1;i++) ans += Pow(9,i);
+        int M = x[0] - '0';
+        ans += Pow(M-1,n);
+        return ans + dfs(dfs,x,n,M-1,1,0);
+    };
+    cout << cal(to_string(r)) - cal(to_string(l-1)) << endl;
 }
 signed main()
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);cout.tie(0);
-	#ifdef LOCAL
-		freopen("C:\\Users\\lanqiao\\text.in","r",stdin);
-	#endif
-	int T = 1;
-//	cin >> T;
-	while(T --) solve();
-	return 0;
+    ios::sync_with_stdio(false);
+    cin.tie(0);cout.tie(0);
+    int T = 1;
+    // cin >> T;
+    while(T --) solve();
+    return 0;
 }

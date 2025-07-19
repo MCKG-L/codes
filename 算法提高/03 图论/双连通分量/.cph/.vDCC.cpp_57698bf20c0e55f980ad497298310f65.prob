@@ -1,0 +1,1 @@
+{"name":"Local: vDCC","url":"e:\\project\\C++vscode\\算法提高\\03 图论\\双连通分量\\vDCC.cpp","tests":[{"id":1752388635146,"input":"8 6\n1 8\n6 2\n6 1\n7 7\n1 6\n4 8\n","output":"7\n1 3\n1 5\n1 7\n2 1 6\n2 1 8\n2 2 6\n2 4 8\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\算法提高\\03 图论\\双连通分量\\vDCC.cpp","group":"local","local":true}

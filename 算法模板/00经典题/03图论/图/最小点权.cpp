@@ -52,7 +52,7 @@ void solve(){
         st[i] = 1;
         cnt.resize(31,0);
         alls.clear();
-        int sz =  dfs(dfs,i); //让连通块中的第一个数为0，只需跑一次
+        int sz = dfs(dfs,i); //让连通块中的第一个数为0，只需跑一次
         if(sz == -1){
             cout << -1 << endl;
             return;

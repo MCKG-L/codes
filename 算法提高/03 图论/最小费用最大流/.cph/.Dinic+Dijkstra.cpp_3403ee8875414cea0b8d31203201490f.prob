@@ -1,0 +1,1 @@
+{"name":"Local: Dinic+Dijkstra","url":"e:\\project\\C++vscode\\算法提高\\03 图论\\最小费用最大流\\Dinic+Dijkstra.cpp","tests":[{"id":1752934264040,"input":"4 5 4 3\n4 2 30 2\n4 3 20 3\n2 3 20 1\n2 1 30 9\n1 3 40 5","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\算法提高\\03 图论\\最小费用最大流\\Dinic+Dijkstra.cpp","group":"local","local":true}

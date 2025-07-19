@@ -1,8 +1,8 @@
 @echo off
 set /a cnt = 0
-g++ good.cpp -o good.exe -std=c++11
-g++ bad.cpp -o bad.exe -std=c++11
-g++ make.cpp -o make.exe -std=c++11
+g++ good.cpp -o good.exe -std=c++17
+g++ bad.cpp -o bad.exe -std=c++17
+g++ make.cpp -o make.exe -std=c++17
 
 :loop
 set /a cnt += 1
