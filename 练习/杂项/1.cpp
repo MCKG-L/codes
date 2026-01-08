@@ -5,65 +5,70 @@ using namespace std;
 using i128 = __int128;
 typedef pair<int,int> PII;
 using ll = long long;
-const int mod = 1e9 + 7,inf = 1e18;
-const int N = 5e3 + 10,M = 1e5 + 10;
-struct Node{
-    int v,c,d,ne;
-}e[M];
-int h[N],mf[N],pre[N],idx = 1;
-void add(int a,int b,int c,int d){
-    e[++idx] = {b,c,d,h[a]};
-    h[a] = idx;
-}
-int st[N],dis[N];
+const int N = 1e5 + 10,M = 32,mod = 1e9 + 7,inf = 1e18;
 void solve(){
-    int n,m,s,t;
-    cin >> n >> m >> s >> t;
-    for(int i=0;i<m;i++){
-        int u,v,c,w;
-        cin >> u >> v >> c >> w;
-        add(u,v,c,w);
-        add(v,u,0,-w);
+    int n;cin >> n;
+    vector<int> a(n + 1);
+    for(int i=1;i<=n;i++) cin >> a[i];
+    vector<int> primes;
+    int m = 100;
+    vector<bool> st(m + 1);
+    //1<=ai<=100
+    for(int i=2;i<=m;i++){
+        if(!st[i]) primes.push_back(i);
+        for(int j=0;primes[j]<=m/i;j++){
+            st[primes[j] * i] = 1;
+            if(i % primes[j] == 0) break;
+        }
     }
-    auto spfa = [&]()->bool{
-        // dis.assign(n + 1,inf);
-        memset(dis,0x3f,sizeof dis);
-        memset(st,false,sizeof st);
-        memset(mf,0,sizeof mf);
-        queue<int> q;q.push(s);
-        dis[s] = 0,mf[s] = inf;
-        st[s] = 1;
-        while(q.size()){
-            auto ver = q.front();q.pop();
-            st[ver] = false;
-            for(int i=h[ver];i;i=e[i].ne){
-                auto [v,c,w,_] = e[i];
-                if((dis[v] > dis[ver] + w) && c){
-                    dis[v] = dis[ver] + w;
-                    mf[v] = min(mf[ver],c);
-                    pre[v] = i;
-                    if(!st[v]) q.push(v),st[v] = 1;
-                }
+    vector<array<int,30>> f(n + 1);
+    int len = primes.size();
+    // cerr << len << endl;//最多25个质因子
+    //预处理每个数的质因子个数（奇偶）
+    for(int i=1;i<=n;i++){
+        int x = a[i];
+        for(int j=0;j<len;j++){
+            while(x && x % primes[j] == 0){
+                x /= primes[j];
+                f[i][j] ^= 1;
             }
         }
-        return mf[t] > 0;
-    };
-    int flow = 0,cost = 0;
-    auto EK = [&]()->int{
-        while(spfa()){
-            int v = t;
-            while(v != s){
-                int i = pre[v];
-                e[i].c -= mf[t];
-                e[i^1].c += mf[t];
-                v = e[i^1].v;
+    }
+    int ans = 0;
+    unordered_map<int,int> mp;
+    //分治 统计答案
+    auto dfs = [&](auto dfs,int l,int r)->void{
+        if(l == r){
+            for(int j=0;j<len;j++){
+                if(f[l][j]) return;
             }
-            flow += mf[t];
-            cost += dis[t] * mf[t];
+            ans = 1;
+            return;
+        }
+        int mid = (l + r) / 2;
+        dfs(dfs,l,mid),dfs(dfs,mid+1,r);
+        mp.clear();
+        int x = 0;//状态压缩表示当前的质因子奇偶情况
+        for(int i=mid;i>=1;i--){
+            for(int j=0;j<len;j++){
+                if(!f[i][j]) continue;
+                x ^= (1ll << j);
+            }
+            mp[x] = i;
+        }
+        x = 0;
+        for(int i=mid+1;i<=n;i++){
+            for(int j=0;j<len;j++){
+                if(!f[i][j]) continue;
+                x ^= (1ll << j);
+            }
+            if(mp.count(x)){
+                ans = max(ans,i-mp[x]+1);
+            }
         }
     };
-    EK();
-    cout << flow << ' ' << cost << endl;
+    dfs(dfs,1,n);
+    cout << ans << endl;
 }
 signed main()
 {

@@ -18,7 +18,7 @@ const int N = 2e5 + 10, mod = 998244353ll,inf = 1e18;
 
 使用并查集，维护点的联通状态以及每个联通块中还未被处理的A中点个数和B中点个数
 
-每次合并连通块是权值贡献未w * min(sz1[v],sz2[v]);
+每次合并连通块时权值贡献为：w * min(sz1[v],sz2[v]);
 */
 struct Node{
     int u,v,val;

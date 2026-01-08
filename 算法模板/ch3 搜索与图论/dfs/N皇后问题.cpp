@@ -19,7 +19,7 @@ void dfs(int x){
         return;
     }
     for(int i=0;i<n;i++){
-        if(!a[x]&&!b[i]&&!c[x+i]&&!d[n+i-x]){
+        if(!b[i]&&!c[x+i]&&!d[n+i-x]){
             a[x] = i+1;
             g[x][i] = 'Q';
             b[i] = 1;

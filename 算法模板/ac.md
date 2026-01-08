@@ -214,7 +214,7 @@ void init(){
 }
 // ---------区间赋值 区间最值-----------
 struct Tag { //懒标记信息
-    int add = 0；
+    int add = 0;
     bool put = false;
     void apply(const Tag &t){ //懒标记传递
         if(t.put){
@@ -226,7 +226,7 @@ struct Tag { //懒标记信息
 struct Info { //线段树维护的信息
     int mx = 0;
     void apply(const Tag &t) {// 懒标记apply
-        if(t.put) mx += t.add;
+        if(t.put) mx = t.add;
     }
 };
 Info operator+(const Info &ls,const Info &rs) { //由子节点更新父节点

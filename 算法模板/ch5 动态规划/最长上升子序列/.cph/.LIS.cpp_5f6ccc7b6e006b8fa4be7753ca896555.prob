@@ -1,0 +1,1 @@
+{"name":"Local: LIS","url":"e:\\project\\C++vscode\\算法模板\\ch5 动态规划\\最长上升子序列\\LIS.cpp","tests":[{"id":1753003593840,"input":"10\n-50 25 -3 20 -30 27 28 -35 16 22","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\project\\C++vscode\\算法模板\\ch5 动态规划\\最长上升子序列\\LIS.cpp","group":"local","local":true}
